@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Classroom, Schedule
+from apiControle.models import Classroom, Schedule
 
 class ClassroomSerializer(serializers.Serializer):
     id = serializers.IntegerField()
