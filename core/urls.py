@@ -1,22 +1,13 @@
-"""
-URL configuration for core project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
 from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/salas/', views.list_class, name='list_rooms'),
+    path('api/salas/<int:id>/', views.class_details, name='class_details'),
+    path('api/salas/create/', views.create_class, name='create_class'),
+    path('api/salas/<int:id>/update/', views.update_class, name='update_class'),
+    path('api/salas/<int:id>/delete/', views.delete_class, name='delete_class'),
+    path('api/salas/<int:id>/available-times/', views.list_available_times, name='list_available_times'),
+    path('api/salas/<int:id>/reserve/', views.reserve_class, name='reserve_class'),
+    path('api/reservations/<int:id>/cancel/', views.cancel_reservation, name='cancel_reservation'),
 ]
