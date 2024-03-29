@@ -1,9 +1,12 @@
 from django.views import View
 from django.shortcuts import render
-from django.http import JsonResponse
-from apiControle.models import Classroom, Schedule
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
+from apiControle.models import Classroom
 from apiControle.serializer import ClassroomSerializer
 from apiControle.repository import Repository
+
+
 class ClassroomListView(View):
     def get(self, request):
         repository = Repository('classrooms')
@@ -21,13 +24,10 @@ class ClassroomListView(View):
                 'name': dados_validos.name,
                 'capacity': dados_validos.capacity
             }
-            # Realiza a inserção dos dados válidos no repositório
             repository.insert(dados_dict)
-            # Após a inserção bem-sucedida, renderiza novamente a página com os novos dados
-            classrooms = repository.getAll()  # Atualiza a lista de salas de aula
-            context = {'classrooms': classrooms}
-            return render(request, 'index.html', context)
+            return HttpResponseRedirect(reverse('list_rooms'))
         return JsonResponse(serializer.errors, status=400)
+
 
 class ClassroomDetailsView(View):
     def get(self, request, id):
@@ -38,6 +38,7 @@ class ClassroomDetailsView(View):
             context = {'classroom': serializer.data}
             return render(request, 'index.html', context)
         return JsonResponse({"error": "Classroom not found"}, status=404)
+    
 
     def put(self, request, id):
         repository = Repository('classrooms')
@@ -52,8 +53,8 @@ class ClassroomDetailsView(View):
 
     def delete(self, request, id):
         repository = Repository('classrooms')
-        classroom = repository.getById(id)
-        if classroom:
-            repository.delete(id)
+        success = repository.delete(id)
+        
+        if success:
             return JsonResponse({"message": "Classroom deleted"}, status=204)
         return JsonResponse({"error": "Classroom not found"}, status=404)
