@@ -33,11 +33,9 @@ class ClassroomDetailsView(View):
     def get(self, request, id):
         repository = Repository('classrooms')
         classroom = repository.getById(id)
-        if classroom:
-            serializer = ClassroomSerializer(classroom)
-            context = {'classroom': serializer.data}
-            return render(request, 'index.html', context)
-        return JsonResponse({"error": "Classroom not found"}, status=404)
+        context = {'classroom': classroom, 'id': id}  # Passa o ID da sala de aula para o contexto
+        return render(request, 'update_class.html', context)
+
 
     def put(self, request, id):
         repository = Repository('classrooms')
@@ -45,10 +43,18 @@ class ClassroomDetailsView(View):
         if classroom:
             serializer = ClassroomSerializer(classroom, data=request.POST)
             if serializer.is_valid():
-                serializer.save()
+                dados_validos = serializer.save()
+                dados_dict = {
+                    'id': dados_validos.id,
+                    'name': dados_validos.name,
+                    'capacity': dados_validos.capacity
+                }
+                # Atualiza os dados válidos no repositório
+                repository.update(id, dados_dict)
                 return JsonResponse(serializer.data)
             return JsonResponse(serializer.errors, status=400)
         return JsonResponse({"error": "Classroom not found"}, status=404)
+
 
     def delete(self, request, id):
         repository = Repository('classrooms')

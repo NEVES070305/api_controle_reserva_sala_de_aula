@@ -9,7 +9,7 @@
         <h2>Classrooms:</h2>
         <ul>
             {% for classroom in classrooms %}
-            <li>{{ classroom.name }} - Capacity: {{ classroom.capacity }}</li>
+            <li>{{ classroom.name }} - Capacity: {{ classroom.capacity }} <a href="{% url 'update_class' id=classroom.id %}">Update</a></li>
             {% endfor %}
         </ul>
         
