@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-)j51j(y3+@66y*s*heckqgi3*$cw=-id-an)ov_qd5cow3^(00
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+# MONGO_CONNECTION_STRING = "mongodb+srv://vincenzo:nuDIS9DDHgmumJs0@cluster0.upemwza.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGO_CONNECTION_STRING = 'mongodb://10.109.2.63:443/'
+MONGO_DATABASE_NAME = 'weather_vincenzo'
 
 
 # Application definition
@@ -53,10 +57,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'apiControle/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,15 +81,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-"""
-DATABASES = {
+"""DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'ENFORCE_SCHEMA': False,  # Se deseja aplicar um esquema ao banco de dados
+        'CLIENT': {
+            'host': '10.109.2.63',  # Endereço do seu banco de dados MongoDB
+            'port': 443,             # Porta do MongoDB
+            'username': 'vincenzo',  # Nome de usuário do MongoDB
+            'password': 'nuDIS9DDHgmumJs0',  # Senha do MongoDB
+            'db_name': 'weather_vincenzo',  # Nome do banco de dados MongoDB
+        }
     }
 }
-"""
 
+"""
 
 
 # Password validation
