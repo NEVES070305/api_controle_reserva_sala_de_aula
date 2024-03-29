@@ -9,7 +9,13 @@
         <h2>Classrooms:</h2>
         <ul>
             {% for classroom in classrooms %}
-            <li>{{ classroom.name }} - Capacity: {{ classroom.capacity }}</li>
+            <li>
+                {{ classroom.name }} - Capacity: {{ classroom.capacity }}
+                <form action="{% url 'delete_class' id=classroom.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete Now</button>
+                </form>
+            </li>
             {% endfor %}
         </ul>
         
