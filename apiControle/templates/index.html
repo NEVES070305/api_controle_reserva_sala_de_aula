@@ -9,7 +9,14 @@
         <h2>Classrooms:</h2>
         <ul>
             {% for classroom in classrooms %}
-            <li>{{ classroom.name }} - Capacity: {{ classroom.capacity }} <a href="{% url 'update_class' id=classroom.id %}">Update</a></li>
+            <li>
+                {{ classroom.name }} - Capacity: {{ classroom.capacity }}
+                <form action="{% url 'delete_class' id=classroom.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete Now</button>
+                    <a href="{% url 'update_class' id=classroom.id %}">Update</a>
+                </form>
+            </li>
             {% endfor %}
         </ul>
         
